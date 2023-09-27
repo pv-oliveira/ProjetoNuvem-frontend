@@ -1,0 +1,82 @@
+
+  @keyframes shine {
+    to {
+      background-position: 100% 0;
+    }
+  }
+  
+
+/* 
+  .hastooltip .tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    width: 200px;
+    margin-top: -30px;
+    margin-left: -107px;
+    background-color: #222222;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 10000;
+    opacity: 1;
+    transition: opacity 0.5s;
+    font-size: 8pt;
+  } */
+
+  /* .hastooltip .svg-container svg *{
+    color: red ;
+  } */
+
+  /* .hastooltip svg{
+    color: red;
+  } */
+  
+  .hastooltip .tooltiptext-left {
+    visibility: hidden;
+    position: absolute;
+    width: 150px;
+    margin-left: 10px;
+    background-color: #222222;
+    color: black;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 10000;
+    opacity: 1;
+    transition: opacity 0.5s;
+    font-size: 8pt;
+
+  }
+  
+  .hastooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    color: black;
+    border-color: #222222 transparent transparent transparent;
+  }
+  
+  .hastooltip .tooltiptext-left::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #222222 transparent transparent transparent;
+  }
+  
+  .hastooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 0.8;
+  }
+  
+  .hastooltip:hover .tooltiptext-left {
+    visibility: visible;
+    opacity: 0.8;
+  }

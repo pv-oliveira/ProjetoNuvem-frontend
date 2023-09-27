@@ -1,0 +1,20 @@
+.form-container {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    width: 500px;
+    height: 200px;
+    margin: 5px;
+
+}
+.input-container-modal {
+    background-color: rgb(68, 68, 68);;
+}
+
+.input-container-modal span {
+    margin-top: 2em;
+}
+
+.input-container-modal span input{
+    color: #000;
+}

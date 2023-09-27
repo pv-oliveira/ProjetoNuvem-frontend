@@ -1,0 +1,42 @@
+.modal-screen{
+    display: flex;
+    flex: 1;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,.5);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 99999999;
+    justify-content: center;
+  }
+  
+  .modal-container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background: #111827;
+    margin-bottom: 0;
+    margin-top: 10vh;
+    min-width: 40%;
+    padding: 35px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+  }
+  
+  .modal-container span{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-self: stretch;
+    /* margin-top: 15px; */
+  }
+  
+  @keyframes fadeUp {
+    0% { margin-top: 100vh }
+    100% { margin-top: 10vh }
+  }

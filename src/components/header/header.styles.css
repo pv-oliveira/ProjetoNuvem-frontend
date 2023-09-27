@@ -1,0 +1,16 @@
+.navigation {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px; 
+}
+
+.routes-links button {
+    margin: 15px;
+}
+
+ .nav-links button {
+    justify-content: flex-end;
+    margin: 15px 15px 0px 0px;
+}
