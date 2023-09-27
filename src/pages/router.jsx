@@ -9,8 +9,6 @@ import Header from '../components/header/header.component';
 const router = () => {
   const auth = useContext(UserContext)
 
-  console.log('teste')
-
   // Componente que confere se há usuario conectado, só permite acesso a rotas privadas a usuarios
   const PrivateRoute = () => {
     return auth.currentUser ? <Header> <Outlet /> </Header> : <Navigate to="/" />
