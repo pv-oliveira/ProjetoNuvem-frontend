@@ -16,6 +16,8 @@ const Header = ({children}) => {
     <div className='navigation'>
       <div className='routes-links'>
         <button className="button" onClick={() => navigate('/clientes')}>Clientes</button>
+        <button className="button" onClick={() => navigate('/produtos')}>Produtos</button>
+        <button className="button" onClick={() => navigate('/pedidos')}>Pedidos</button>
       </div>
       <div className='nav-links'>
         {/* <button className="four-btn" onClick={() => navigate('/')}>Login</button> */}

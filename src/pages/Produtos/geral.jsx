@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from '../../components/modal/modal.components';
 
 
-export default function GeralCrud({ parentState, cliente, setParentState, setCliente }) {
+export default function GeralCrud({ parentState, produto, setParentState, setProduto }) {
     const [modalOption, setModalOption] = useState("geral");      //Hook para controle do modal das info gerais
 
     const modalOptionsMap = {
@@ -12,23 +12,27 @@ export default function GeralCrud({ parentState, cliente, setParentState, setCli
                     <tbody>
                         <tr>
                             <td style={{borderStyle: 'groove'}}>Nome</td>
-                            <td> {cliente?.name} </td>
+                            <td> {produto?.name} </td>
                         </tr>
                         <tr>
-                            <td style={{borderStyle: 'groove'}}> Email </td>
-                            <td> {cliente?.email} </td>
+                            <td style={{borderStyle: 'groove'}}> Tipo </td>
+                            <td> {produto?.type} </td>
                         </tr>
                         <tr>
-                            <td style={{borderStyle: 'groove'}}> CPF </td>
-                            <td> {cliente?.cpf} </td>
+                            <td style={{borderStyle: 'groove'}}> Preço </td>
+                            <td> {produto?.preco} </td>
                         </tr>
                         <tr>
-                            <td style={{borderStyle: 'groove'}}> Endereço </td>
-                            <td> {cliente?.address} </td>
+                            <td style={{borderStyle: 'groove'}}> Promoção </td>
+                            <td> {produto?.promocao} </td>
                         </tr>
                         <tr>
-                            <td style={{borderStyle: 'groove'}}> Telefone </td>
-                            <td> {cliente?.phone || "-"} </td>
+                            <td style={{borderStyle: 'groove'}}> Desconto </td>
+                            <td> {produto?.desconto || "-"} </td>
+                        </tr>
+                        <tr>
+                            <td style={{borderStyle: 'groove'}}> Valor </td>
+                            <td> {produto?.valor || "-"} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -40,7 +44,7 @@ export default function GeralCrud({ parentState, cliente, setParentState, setCli
                         backgroundColor: "white",
                         border: "1px solid",
                     }}
-                    onClick={() => { setParentState(false); setCliente({}); setModalOption('geral') }}
+                    onClick={() => { setParentState(false); setProduto({}); setModalOption('geral') }}
                 >
                     Sair
                 </button>

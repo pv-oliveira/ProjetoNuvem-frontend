@@ -1,43 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
-// import { FiEdit3, FiEye, FiFilePlus, FiTrash2 } from "react-icons/fi";
-
-import api from "../../utils/axios";
-import DynamicTable from "../../components/dynamic-table/dynamic-table";
+import React, { useContext, useEffect, useState } from 'react'
+import api from '../../utils/axios';
+import { UserContext } from '../../context/user-context';
+import DynamicTable from '../../components/dynamic-table/dynamic-table';
+import FormProduto from './form-produtos/form-produto';
+import GeralProduto from "./geral"
 import Modal from '../../components/modal/modal.components';
 
-import GeralCrud from "./geral";
-import { UserContext } from "../../context/user-context";
-import FormCliente from "./Form-Clientes/form-cliente";
-
-
-const ListaClientes = () => {
-  // Dados que são recebidos
+const Produtos = () => {
+      // Dados que são recebidos
   const data = {
     name: "",
-    email: "",
-    cpf: "",
-    address: "",
-    phone: "",
+    type: "",
+    price: 0,
+    promotion: false,
+    discount: "",
   }
-  
+
   const [modalForm, setModalForm] = useState(false);        //Hook para controle do modal do formulário
   const [modalGeral, setModalGeral] = useState(false);      //Hook para controle do modal das info gerais
   const [modalDelete, setModalDelete] = useState(false);    //Hook para controle do modal que remoção 
 
-  const [cliente, setCliente] = useState(data);                   //Hook para armazenamento do objeto com os dados, para ser passado aos componentes filhos
+  const [produto, setProduto] = useState(data);                   //Hook para armazenamento do objeto com os dados, para ser passado aos componentes filhos
   const [updating, setUpdating] = useState(false);          //Hook para controle do modo update
 
   const [staticData, setStaticData] = useState([]);         //Dados baixados do backend (READ) que já foram previamente cadastrado 
   const [load, setLoad] = useState(false);                  // Hook para renderezação aguardar dados serem baixados
 
-  const auth = useContext(UserContext)
+  const auth = useContext(UserContext);
 
   // Função para exclusão (DELETE) de dados selecionado
   const handleDelete = async () => {
-    if (!cliente) return alert("Nenhum dado selecionado!");
-    const id = cliente._id
+    if (!produto) return alert("Nenhum dado selecionado!");
+    const id = produto._id
     
-    await api.post('/client/deleteClient', { id }, { headers: { authorization: auth.currentUser?.token } })
+    await api.post('/product/deleteProduct', { id }, { headers: { authorization: auth.currentUser?.token } })
     window.location.reload()
     return
   }
@@ -46,7 +42,7 @@ const ListaClientes = () => {
   useEffect(() => {
     const fetchData = async () => {
       
-      const users = await api.get("/client/getClients", { headers: { authorization: auth.currentUser?.token } });
+      const users = await api.get("/product/getProducts", { headers: { authorization: auth.currentUser?.token } });
 
       setStaticData(users.data);
       setLoad(true);
@@ -54,14 +50,12 @@ const ListaClientes = () => {
     fetchData();
   }, [modalForm]);
 
-  
   if (!load) return <h3>Carregando...</h3>;
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent:'center', alignItems: 'center'}}>
-
       <Modal parentState={modalDelete}>
         <>
-          <p> Tem certeza que deseja excluir os dados de {`${cliente.name}`} permanentemente do banco de dados? </p>
+          <p> Tem certeza que deseja excluir os dados de {`${produto.name}`} permanentemente do banco de dados? </p>
           <span>
             <button className="button" onClick={handleDelete}  > Confirmar </button>
             <button className="button" onClick={() => setModalDelete(false)} > Cancelar </button>
@@ -69,22 +63,21 @@ const ListaClientes = () => {
         </>
       </Modal>
 
-      <GeralCrud
+      <GeralProduto
         parentState={modalGeral}
         setParentState={setModalGeral}
-        setCliente={setCliente}
-        cliente={cliente}
+        setProduto={setProduto}
+        produto={produto}
       />
 
-      <FormCliente
+      <FormProduto
         parentState={modalForm}
         setParentState={setModalForm}
-        cliente={cliente}
-        setCliente={setCliente}
+        produto={produto}
+        setProduto={setProduto}
         updating={updating}
       />
-
-      <h2>ListaClientes</h2>
+      <h2>ListaProdutos</h2>
       <DynamicTable
         hoveble={true}
         dataStatic={staticData}
@@ -94,20 +87,24 @@ const ListaClientes = () => {
             field: "name",
           },
           {
-            header: "Email",
-            field: "email",
+            header: "Tipo",
+            field: "type",
           },
           {
-            header: "Cpf",
-            field: "cpf",
+            header: "Preço",
+            field: "price",
           },
           {
-            header: "Address",
-            field: "address",
+            header: "Promoção",
+            field: "promocao",
           },
           {
-            header: "Phone",
-            field: "phone",
+            header: "Desconto",
+            field: "desconto",
+          },
+          {
+            header: "Valor",
+            field: "valor",
           }
         ]}
         navItens={[
@@ -115,7 +112,7 @@ const ListaClientes = () => {
             returnIcon: () => {},
             describe: "General Information",
             action: (itens, dataCache) => {
-              setCliente(dataCache.filter(item => item._id === itens[0])[0])
+              setProduto(dataCache.filter(item => item._id === itens[0])[0])
               setModalGeral(true);
             },
             activeWith: (itens, cache) =>
@@ -135,7 +132,7 @@ const ListaClientes = () => {
             describe: "Update",
             action: (itens, dataCache) => {
               setUpdating(true);
-              setCliente(dataCache.filter(item => item._id === itens[0])[0])
+              setProduto(dataCache.filter(item => item._id === itens[0])[0])
               setModalForm(true);
             },
             activeWith: (itens, cache) =>
@@ -145,7 +142,7 @@ const ListaClientes = () => {
             returnIcon: () => {},
             describe: "Delete",
             action: (itens, dataCache) => {
-              setCliente(dataCache.filter(item => item._id === itens[0])[0])
+              setProduto(dataCache.filter(item => item._id === itens[0])[0])
               setModalDelete(true)
             },
             activeWith: (itens, cache) =>
@@ -155,7 +152,7 @@ const ListaClientes = () => {
         ]}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ListaClientes;
+export default Produtos

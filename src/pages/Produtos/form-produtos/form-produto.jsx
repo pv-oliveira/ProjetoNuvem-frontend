@@ -5,19 +5,19 @@ import { UserContext } from '../../../context/user-context';
 import api from '../../../utils/axios';
 import Modal from '../../../components/modal/modal.components';
 
-import './form-cliente.styles.css'
+import './form-produto.styles.css'
 
 
-const FormCliente = ({ parentState, setParentState, setCliente, cliente, updating }) => {
+const FormProduto = ({ parentState, setParentState, setProduto, produto, updating }) => {
     // Campos com dados que são utilizados nas operações do CRUD
     const [formFields, setFormFields] = useState({
         name: "",
-        email: "",
-        cpf: "",
-        address: "",
-        phone: "",
+        type: "",
+        price: "",
+        promotion: false,
+        discount: "",
     });
-    const { _id, name, email, cpf, address, phone } = formFields;
+    const { _id, name, type, price, promotion, discount } = formFields;
 
     // Controle do modal
     const [modalOption, setModalOption] = useState("form");
@@ -29,17 +29,21 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
         async function fetchData() {
             if (!updating) return
             // Caso state "updating" seja true os campos serão preenchidos com os dado selecionado
-            setFormFields(cliente)
+            setFormFields(produto)
         }
         // Baixando dados
         fetchData()
     }, [parentState])
 
-  // Função que atribui valor inserido ao hook "data" 
+    // Função que atribui valor inserido ao hook "data" 
     const handleChange = (event) => {
-        const { name, value } = event.target;
-
-        setFormFields({ ...formFields, [name]: value });
+        const { name, value, type, checked } = event.target;
+        
+        if (type === 'checkbox') {
+            setFormFields({ ...formFields, [name]: checked });
+          } else {
+            setFormFields({ ...formFields, [name]: value });
+          }
     };
 
     // Função que executa as operações CREATE e UPDATE
@@ -48,12 +52,12 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
         
         //Dados são enviados ao backend para serem enviados ao banco de dados, com validação do token
         if (updating) {
-            const res = await api.post("/client/updateClient", { _id, name, email, cpf, address, phone }, { headers: { authorization: auth.currentUser?.token}});
+            const res = await api.post("/product/updateProduct", { _id, name, type, price: parseFloat(price), promotion, discount }, { headers: { authorization: auth.currentUser?.token}});
 
             res ? window.location.reload() : null
             return;
         } else {
-            api.post("/client/create", { name, email, cpf, address, phone }, { headers: { authorization: auth.currentUser?.token}})
+            api.post("/product/create", { name, type, price: parseFloat(price), promotion, discount }, { headers: { authorization: auth.currentUser?.token}})
             .then(res => {
                 console.log(res)
                 window.location.reload()
@@ -65,7 +69,7 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
     // Caso modal seja fechado evita que existam dados anteriores nos states
     function handleQuestion(toParentState, toLimpezaParcial, limparItem) {
         setParentState(toParentState);
-        if (limparItem) setCliente("");
+        if (limparItem) setProduto("");
         setModalOption("form");
     }
 
@@ -106,9 +110,9 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
                     onSubmit={handleSubmit}
                     className='form-container'
                     >
-                    <h2>Enter Data:</h2>
+                    <h2>Cadastro produto:</h2>
                     <div className='input-container-modal'>
-                        <span >Name:
+                        <span >Nome:
                             <input
                                 type="text"
                                 required
@@ -118,43 +122,48 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
                                 onChange={handleChange}
                             />
                         </span>
-                        <span style={{padding: '20px'}}>Email:
+                        <span style={{padding: '20px'}}>Tipo:
                             <input
                                 type="text"
                                 required
-                                id="email"
-                                name="email"
-                                value={email}
+                                id="type"
+                                name="type"
+                                value={type}
                                 onChange={handleChange}
                             />
                         </span>
-                        <span style={{padding: '20px'}}>Cpf:
+                        <span style={{padding: '20px'}}>Preço:
                             <input
                                 type="text"
                                 required
-                                id="cpf"
-                                name="cpf"
-                                value={cpf}
+                                placeholder='R$'
+                                id="price"
+                                name="price"
+                                value={price}
                                 onChange={handleChange}
                             />
                         </span>
-                        <span style={{padding: '20px'}}>Address:
+                        <div className='label-check'>
+                        <label style={{marginRight: '140px', fontSize: '16px', marginTop: '2rem'}}>Promoção: </label>
+                            <label className="switch" id="switch_promotion">
                             <input
-                                type="text"
-                                required
-                                id="address"
-                                name="address"
-                                value={address}
+                                className='check'
+                                type="checkbox"
+                                name='promotion'
+                                checked={promotion}
                                 onChange={handleChange}
-                            />
-                        </span>
-                        <span style={{padding: '20px'}}>Phone:
+                                ></input>
+                            <span className="slider round" style={{margin: '0px'}}></span>
+                            </label>
+                        </div>
+                        <span style={{padding: '20px'}}>Desconto:
                             <input
+                                disabled={!promotion}
                                 type="text"
                                 required
-                                id="phone"
-                                name="phone"
-                                value={phone}
+                                id="discount"
+                                name="discount"
+                                value={discount}
                                 onChange={handleChange}
                             />
                         </span>
@@ -187,4 +196,4 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
     )
 }
 
-export default FormCliente
+export default FormProduto
