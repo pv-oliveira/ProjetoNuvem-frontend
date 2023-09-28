@@ -38,7 +38,7 @@ export default function GeralCrud({ parentState, produto, setParentState, setPro
                 </table>
 
                 <button
-                    className="primary-button"
+                    className="button"
                     style={{
                         color: "#006699",
                         backgroundColor: "white",

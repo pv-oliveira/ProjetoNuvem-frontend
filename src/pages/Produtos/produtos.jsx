@@ -42,9 +42,9 @@ const Produtos = () => {
   useEffect(() => {
     const fetchData = async () => {
       
-      const users = await api.get("/product/getProducts", { headers: { authorization: auth.currentUser?.token } });
+      const data = await api.get("/product/getProducts", { headers: { authorization: auth.currentUser?.token } });
 
-      setStaticData(users.data);
+      setStaticData(data.data);
       setLoad(true);
     };
     fetchData();
@@ -77,7 +77,7 @@ const Produtos = () => {
         setProduto={setProduto}
         updating={updating}
       />
-      <h2>ListaProdutos</h2>
+      <h2>Lista Produtos</h2>
       <DynamicTable
         hoveble={true}
         dataStatic={staticData}

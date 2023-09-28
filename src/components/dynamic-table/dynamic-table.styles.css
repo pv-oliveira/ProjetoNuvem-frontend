@@ -80,3 +80,11 @@
     visibility: visible;
     opacity: 0.8;
   }
+
+  .primary-table.primary-table-hover > thead > tr > th {
+    color: #fff;
+  }
+
+  .primary-table.primary-table-hover > tbody > tr > td {
+    color: #fff;
+  }

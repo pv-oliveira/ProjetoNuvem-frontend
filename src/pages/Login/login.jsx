@@ -54,7 +54,7 @@ const Login = () => {
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     const res = await api.post('/auth/login', { email, password })
-    console.log(res)
+    
     const token = res.data.token
 
     setCurrentUser({ name, email, token })

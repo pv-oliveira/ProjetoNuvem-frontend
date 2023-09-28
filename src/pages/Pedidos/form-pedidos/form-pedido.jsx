@@ -5,19 +5,22 @@ import { UserContext } from '../../../context/user-context';
 import api from '../../../utils/axios';
 import Modal from '../../../components/modal/modal.components';
 
-import './form-cliente.styles.css'
+import './form-pedido.styles.css'
 
 
-const FormCliente = ({ parentState, setParentState, setCliente, cliente, updating }) => {
+const FormPedido = ({ parentState, setParentState, setPedido, pedido, updating }) => {
     // Campos com dados que são utilizados nas operações do CRUD
     const [formFields, setFormFields] = useState({
-        name: "",
-        email: "",
-        cpf: "",
+        description: "",
+        client: "",
+        product: "",
         address: "",
-        phone: "",
     });
-    const { _id, name, email, cpf, address, phone } = formFields;
+    const { _id, description, client, product, address } = formFields;
+
+    
+    const [produtos, setProdutos] = useState([]);
+    const [clientes, setClientes] = useState([]);
 
     // Controle do modal
     const [modalOption, setModalOption] = useState("form");
@@ -29,17 +32,32 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
         async function fetchData() {
             if (!updating) return
             // Caso state "updating" seja true os campos serão preenchidos com os dado selecionado
-            setFormFields(cliente)
+            setFormFields(pedido)
         }
         // Baixando dados
         fetchData()
-    }, [parentState])
+    }, [parentState]);
+    
+    useEffect(() => {
+        const fetchData = async () => {
+          const clientes = await api.get("/client/getClients", {
+            headers: { authorization: auth.currentUser?.token },
+          });
+          const produtos = await api.get("/product/getProducts", {
+            headers: { authorization: auth.currentUser?.token },
+          });
+          setClientes(clientes.data);
+          setProdutos(produtos.data);
+        };
+        fetchData();
+      }, []);
 
-  // Função que atribui valor inserido ao hook "data" 
+    // Função que atribui valor inserido ao hook "data" 
     const handleChange = (event) => {
         const { name, value } = event.target;
-
+        
         setFormFields({ ...formFields, [name]: value });
+
     };
 
     // Função que executa as operações CREATE e UPDATE
@@ -48,12 +66,12 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
         
         //Dados são enviados ao backend para serem enviados ao banco de dados, com validação do token
         if (updating) {
-            const res = await api.post("/client/updateClient", { _id, name, email, cpf, address, phone }, { headers: { authorization: auth.currentUser?.token}});
+            const res = await api.post("/pedido/updatePedido", { _id, description, client_id: client, product_id: product, address }, { headers: { authorization: auth.currentUser?.token}});
 
             res ? window.location.reload() : null
             return;
         } else {
-            api.post("/client/create", { name, email, cpf, address, phone }, { headers: { authorization: auth.currentUser?.token}})
+            api.post("/pedido/create", { description, client_id: client, product_id: product, address }, { headers: { authorization: auth.currentUser?.token}})
             .then(res => {
                 console.log(res)
                 window.location.reload()
@@ -65,7 +83,7 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
     // Caso modal seja fechado evita que existam dados anteriores nos states
     function handleQuestion(toParentState, toLimpezaParcial, limparItem) {
         setParentState(toParentState);
-        if (limparItem) setCliente("");
+        if (limparItem) setPedido("");
         setModalOption("form");
     }
 
@@ -105,41 +123,32 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
                 <form
                     onSubmit={handleSubmit}
                     className='form-container'
+                    id="modal-pedido-form"
                     >
-                    <h2>Enter Data:</h2>
+                    <h2>Cadastro pedido:</h2>
                     <div className='input-container-modal'>
-                        <span >Name:
-                            <input
-                                type="text"
-                                required
-                                id="name"
-                                name="name"
-                                value={name}
-                                onChange={handleChange}
-                            />
+                    <span style={{padding: '20px'}}>Clientes:
+                        <select name="client" id="client" value={pedido.client_id} onChange={handleChange}>
+                            <option value="">Selecione</option>
+                            {clientes.map((cliente) => (
+                                <option value={cliente._id}>{cliente.name}</option>
+                            ))}
+                        </select>
                         </span>
-                        <span style={{padding: '20px'}}>Email:
-                            <input
-                                type="text"
-                                required
-                                id="email"
-                                name="email"
-                                value={email}
-                                onChange={handleChange}
-                            />
+
+                        <span style={{padding: '20px'}}>Produtos:
+                        <select name="product" id="product" value={pedido.product_id} onChange={handleChange}>
+                            <option value="">Selecione</option>
+                            {produtos.map((produto) => (
+                                <option value={produto._id}>{produto.name}</option>
+                            ))}
+                        </select>
                         </span>
-                        <span style={{padding: '20px'}}>Cpf:
+
+
+                        <span >Endereço:
                             <input
-                                type="text"
-                                required
-                                id="cpf"
-                                name="cpf"
-                                value={cpf}
-                                onChange={handleChange}
-                            />
-                        </span>
-                        <span style={{padding: '20px'}}>Address:
-                            <input
+                                style={{ width: '300px' }}
                                 type="text"
                                 required
                                 id="address"
@@ -148,16 +157,19 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
                                 onChange={handleChange}
                             />
                         </span>
-                        <span style={{padding: '20px'}}>Phone:
-                            <input
+
+                        <div style={{padding: '20px'}}>Observações:
+                            <textarea
                                 type="text"
                                 required
-                                id="phone"
-                                name="phone"
-                                value={phone}
+                                id="description"
+                                name="description"
+                                value={description}
                                 onChange={handleChange}
                             />
-                        </span>
+                        </div>
+                        
+                        
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
@@ -187,4 +199,4 @@ const FormCliente = ({ parentState, setParentState, setCliente, cliente, updatin
     )
 }
 
-export default FormCliente
+export default FormPedido

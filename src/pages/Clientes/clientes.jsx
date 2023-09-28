@@ -47,7 +47,7 @@ const ListaClientes = () => {
     const fetchData = async () => {
       
       const users = await api.get("/client/getClients", { headers: { authorization: auth.currentUser?.token } });
-
+      
       setStaticData(users.data);
       setLoad(true);
     };

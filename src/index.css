@@ -5,9 +5,9 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: #454444;
 } */
-*:not(svg, span, img, path, circle, line, polyline) {
+/* *:not(svg, img, path, circle, line, polyline) {
   color: #ffffff;
-}
+} */
 html
   {
     background: #111827;
@@ -21,6 +21,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  color: #fff;
 }
 
 input, textarea {
@@ -132,6 +133,10 @@ h3 {
   color: blue;
 }
 
+select {
+  color: #000;
+}
+
 .search-menu {
   display: flex;
   position: relative;
@@ -171,6 +176,10 @@ h3 {
 .secundary-table tr td:first-child {
   background-color: rgb(68, 68, 68);
   width: 250px;
+}
+
+textarea {
+  color: #000;
 }
 
 .secundary-table tr td:last-child {

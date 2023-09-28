@@ -85,14 +85,14 @@ const FormProduto = ({ parentState, setParentState, setProduto, produto, updatin
                 </h4>
                 <div style={{ marginTop: "25px" }}>
                     <button
-                        className="primary-button"
+                        className="button"
                         style={{ marginRight: "40px" }}
                         onClick={() => handleQuestion(true, true, false)}
                     >
                         Sim
                     </button>
                     <button
-                        className="primary-button"
+                        className="button"
                         style={{
                             color: "#006699",
                             backgroundColor: "white",
