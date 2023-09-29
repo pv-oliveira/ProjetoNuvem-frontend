@@ -71,6 +71,11 @@ const Login = () => {
     <>
       <div className="container-login">
         <div className="wrap-login">
+          <span>
+            <h3>Para logar</h3>
+            <h5>email: Paulo.victor.ig@hotmail.com</h5>
+            <h5>email: 123456</h5>
+          </span>
           <form className="login-form" onSubmit={handleSubmitLogin}>
 
             <span className="login-form-title"> LOGIN </span>
